@@ -487,7 +487,7 @@ alongside the per-sample Kraken2, assembly, QUAST, BUSCO, AMRFinderPlus, and Vir
 
 
 
-References [references]
+References 
 ----------
 
 <div id="refs" class="references" markdown="1">
