@@ -4,7 +4,7 @@
 
 This Snakemake workflow processes paired-end bacterial whole-genome sequencing (WGS) reads through a series of quality-control, assembly, taxonomic classification, and gene-detection steps.
 
-Instructions on how to create and execute a basic workflow in Snakemake can be found in this wiki <a href="https://github.com/varshanaidu00/Whole-genome-sequencing-of-bacterial-pathogens/wiki" target="_blank">Whole-genome-sequencing-of-bacterial-pathogens GitHub wiki</a>.
+Instructions on how to create and execute a basic workflow in Snakemake can be found in this wiki <a href="https://github.com/varshanaidu00/Whole-genome-sequencing-of-bacterial-pathogens/wiki" target="_blank">Instructions for writing a Snakemake workflow with Conda</a>.
 
 
 The pipeline uses:
