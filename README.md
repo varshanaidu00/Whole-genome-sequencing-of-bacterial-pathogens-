@@ -1,8 +1,9 @@
-## Bacterial WGS Snakemake pipeline using short read data
+Bacterial pathogen WGS for detection of AMR and virulence genes
+=================================================================================================================
 
-## Overview
-
-This Snakemake workflow processes paired-end bacterial whole-genome sequencing (WGS) reads through a series of quality-control, assembly, taxonomic classification, and gene-detection steps.
+## Background
+----------
+This repository provides a reproducible, containerized Snakemake pipeline to analyse paired‑end Illumina whole‑genome sequencing (WGS) FASTQ data from bacterial isolates. The workflow performs taxonomic classification, de novo assembly, assembly quality assessment, and detection of clinically relevant antimicrobial resistance (AMR) genes and known virulence determinants, where applicable. Outputs include per‑sample Kraken2 reports, Unicycler assemblies with QUAST/BUSCO quality metrics, AMRFinderPlus AMR annotations, VirulenceFinder results, and a consolidated pipeline summary suitable for PHL or research. 
 
 Instructions on how to create and execute a basic workflow in Snakemake can be found in this wiki <a href="https://github.com/varshanaidu00/Whole-genome-sequencing-of-bacterial-pathogens-/wiki/Instructions-for-writing-a-Snakemake-workflow-with-Conda" target="_blank">Instructions for writing a Snakemake workflow with Conda</a>.
 
