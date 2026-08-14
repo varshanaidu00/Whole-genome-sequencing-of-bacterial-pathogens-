@@ -10,13 +10,16 @@ Instructions on how to create and execute a basic workflow in Snakemake can be f
 
 The pipeline uses:
 
-* **Kraken2** — taxonomic classification
-* **Unicycler** — de novo genome assembly
-* **QUAST** — assembly quality assessment
-* **BUSCO** — genome completeness assessment
-* **NCBI-AMRFinderPlus** — antimicrobial resistance (AMR) gene detection
-* **VirulenceFinder** — virulence gene detection
-* **Python** — generation of a final per-sample summary table
+- `FastQC` - to perform read QC statistics on reads.
+- `Trimmomatic` (Bolger, Lohse, and Usadel 2014) — adapter removal and quality trimming if needed.
+- `Kraken2` (Wood and Salzberg 2014) — k‑mer based taxonomic classification (Standard-16 DB; Standard with DB capped at 16 GB).
+- `Mash` (Ondov et al. 2016) — k‑mer based genome distance and genome‑size/coverage estimation.
+- `Unicycler` (`SPAdes` v4.30) — hybrid/long‑read-aware assembly (for illumina and ONT workflows).
+- `QUAST` (Gurevich et al. 2013) — assembly quality assessment and metrics.
+- `BUSCO` — conserved single‑copy ortholog assessment for assembly completeness.
+- `mlst` — sequence typing using PubMLST schemes.
+- `NCBI‑AMRFinderPlus` — antimicrobial resistance gene detection.
+- `VirulenceFinder` — virulence gene screening (optional).
 
 Each major tool will run in its own pre-existing Conda environment where specified by the workflow.
 
@@ -480,6 +483,110 @@ The final deliverable is:
 ```text
 <out_dir>/pipeline_summary.tsv
 ```
+References [references]
+----------
+
+<div id="refs" class="references" markdown="1">
+
+<div id="ref-Bankevich2012-of" markdown="1">
+
+Bankevich, Anton, Sergey Nurk, Dmitry Antipov, Alexey A Gurevich,
+Mikhail Dvorkin, Alexander S Kulikov, Valery M Lesin, et al. 2012.
+“SPAdes: A New Genome Assembly Algorithm and Its Applications to
+Single-Cell Sequencing.” *J. Comput. Biol.* 19 (5): 455–77.
+
+</div>
+
+<div id="ref-Bolger2014-qe" markdown="1">
+
+Bolger, Anthony M, Marc Lohse, and Bjoern Usadel. 2014. “Trimmomatic: A
+Flexible Trimmer for Illumina Sequence Data.” *Bioinformatics* 30 (15):
+2114–20.
+
+</div>
+
+<div id="ref-Gurevich2013-cw" markdown="1">
+
+Gurevich, Alexey, Vladislav Saveliev, Nikolay Vyahhi, and Glenn Tesler.
+2013. “QUAST: Quality Assessment Tool for Genome Assemblies.”
+*Bioinformatics* 29 (8): 1072–5.
+
+</div>
+
+<div id="ref-Jolley2018-jn" markdown="1">
+
+Jolley, Keith A, James E Bray, and Martin C J Maiden. 2018. “Open-Access
+Bacterial Population Genomics: BIGSdb Software, the PubMLST.org Website
+and Their Applications.” *Wellcome Open Res* 3 (September): 124.
+
+</div>
+
+<div id="ref-Koster2012-cf" markdown="1">
+
+Köster, Johannes, and Sven Rahmann. 2012. “Snakemake–a Scalable
+Bioinformatics Workflow Engine.” *Bioinformatics* 28 (19): 2520–2.
+
+</div>
+
+<div id="ref-Kurtzer2017-se" markdown="1">
+
+Kurtzer, Gregory M, Vanessa Sochat, and Michael W Bauer. 2017.
+“Singularity: Scientific Containers for Mobility of Compute.” *PLoS One*
+12 (5): e0177459.
+
+</div>
+
+<div id="ref-Li2018-ow" markdown="1">
+
+Li, Heng. 2018. “Seqtk: Toolkit for Processing Sequences in FASTA/Q
+Formats.” <https://github.com/lh3/seqtk>.
+
+</div>
+
+<div id="ref-Ncbi_undated-gz" markdown="1">
+
+NCBI. n.d. “NCBI AMR Reference Gene Database.”
+<https://www.ncbi.nlm.nih.gov/pathogens/isolates#/refgene/>.
+
+</div>
+
+<div id="ref-Ondov2016-gn" markdown="1">
+
+Ondov, Brian D, Todd J Treangen, Páll Melsted, Adam B Mallonee, Nicholas
+H Bergman, Sergey Koren, and Adam M Phillippy. 2016. “Mash: Fast Genome
+and Metagenome Distance Estimation Using MinHash.” *Genome Biol.* 17
+(1): 132.
+
+
+</div>
+
+<div id="ref-Seemann2018-yj" markdown="1">
+
+———. 2018b. “Mlst: Scan Contig Files Against PubMLST Typing Schemes.”
+<https://github.com/tseemann/mlst/>.
+
+
+</div>
+
+<div id="ref-Wood2014-we" markdown="1">
+
+Wood, Derrick E, and Steven L Salzberg. 2014. “Kraken: Ultrafast
+Metagenomic Sequence Classification Using Exact Alignments.” *Genome
+Biol.* 15 (3): R46.
+
+</div>
+
+<div id="ref-Yoshida2016-uu" markdown="1">
+
+Yoshida, Catherine E, Peter Kruczkiewicz, Chad R Laing, Erika J Lingohr,
+Victor P J Gannon, John H E Nash, and Eduardo N Taboada. 2016. “The
+Salmonella in Silico Typing Resource (SISTR): An Open Web-Accessible
+Tool for Rapidly Typing and Subtyping Draft Salmonella Genome
+Assemblies.” *PLoS One* 11 (1): e0147101.
+
+</div>
+
+</div>
 
 alongside the per-sample Kraken2, assembly, QUAST, BUSCO, AMRFinderPlus, and VirulenceFinder results.
 
