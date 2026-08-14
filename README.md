@@ -483,6 +483,10 @@ The final deliverable is:
 ```text
 <out_dir>/pipeline_summary.tsv
 ```
+alongside the per-sample Kraken2, assembly, QUAST, BUSCO, AMRFinderPlus, and VirulenceFinder results.
+
+
+
 References [references]
 ----------
 
@@ -588,5 +592,4 @@ Assemblies.” *PLoS One* 11 (1): e0147101.
 
 </div>
 
-alongside the per-sample Kraken2, assembly, QUAST, BUSCO, AMRFinderPlus, and VirulenceFinder results.
 
