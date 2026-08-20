@@ -1,4 +1,4 @@
-Bacterial pathogen WGS for detection of AMR and virulence genes
+WGS of Bacterial Pathogens for the detection of AMR and virulence genes
 =================================================================================================================
 
 ## Background
