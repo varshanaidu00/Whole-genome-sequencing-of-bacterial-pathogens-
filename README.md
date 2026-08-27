@@ -1,32 +1,99 @@
-WGS of Bacterial Pathogens for the detection of AMR and virulence genes
+Bacterial Whole-Genome Sequencing Analysis Pipeline
 =================================================================================================================
 
 ## Background
 
-This repository provides a reproducible, containerized Snakemake pipeline to analyse paired-end Illumina whole-genome sequencing (WGS) FASTQ data from bacterial isolates. The workflow performs de novo genome assembly, quality assessment, taxonomic classification, and screens for antimicrobial resistance (AMR) and virulence-associated genes.
+A Snakemake-based bacterial whole-genome sequencing (WGS) analysis pipeline for paired-end Illumina FASTQ data. The workflow performs read trimming, read quality assessment, taxonomic classification, de novo genome assembly, assembly quality assessment, genome completeness assessment, read-mapping coverage, MLST typing, antimicrobial resistance (AMR) detection, and virulence gene detection.
+The pipeline is designed so that each bioinformatics tool is run in its own Conda environment, providing reproducibility and simplifying software dependency management.
 
 Instructions on how to create and execute a basic workflow in Snakemake can be found in this [wiki](https://github.com/varshanaidu00/Whole-genome-sequencing-of-bacterial-pathogens-/wiki/).
 
-### Pipeline Tools
+### Overview
 
-The pipeline uses:
+The pipeline takes paired-end raw FASTQ files as input and produces:
 
-- `Trimmomatic` (Bolger, Lohse, and Usadel 2014) — adapter removal and quality trimming.
-- `FastQC` — read QC statistics on trimmed reads.
-- `Kraken2` (Wood and Salzberg 2014) — k-mer based taxonomic classification (Standard-16 DB; capped at 16 GB).
-- `Unicycler` (SPAdes v4.30) — de novo hybrid genome assembly.
-- `QUAST` (Gurevich et al. 2013) — assembly quality assessment and metrics.
-- `BUSCO` — conserved single-copy ortholog assessment for assembly completeness.
-- `CoverM` — sequencing depth and coverage analysis.
-- `mlst` — sequence typing using PubMLST schemes.
-- `NCBI AMRFinderPlus` — antimicrobial resistance gene detection.
-- `VirulenceFinder` — virulence gene screening.
+- Quality control metrics from `FastQC`
+- Adapter and quality-trimmed reads using `Trimmomatic`
+- Taxonomic classification using `Kraken2`
+- De novo genome assemblies using `Unicycler`
+- Assembly statistics using `QUAST`
+- Genome completeness using `BUSCO`
+- Read depth/coverage using `CoverM`
+- Sequence typing using `MLST`
+- Antimicrobial resistance gene detection using `AMRFinderPlus`
+- Virulence gene detection using `VirulenceFinder`
 
-Each tool runs in its own pre-configured Conda environment as specified in the workflow.
+A final tabulated summary containing key metrics for every sample
 
+```
+                     Raw paired-end FASTQ
+                              |
+                              v
+                     +----------------+
+                     |  Trimmomatic   |
+                     +-------+--------+
+                             |
+                     Trimmed paired reads
+                             |
+             +---------------+----------------+
+             |               |                |
+             v               v                v
+         +-------+       +---------+      +----------+
+         |FastQC |       | Kraken2 |      | Unicycler|
+         +-------+       +---------+      +----+-----+
+                                               |
+                                        assembly.fasta
+                                               |
+                  +------------+---------------+---------------+
+                  |            |               |               |
+                  v            v               v               v
+                QUAST        BUSCO           CoverM           MLST
+                  |            |               |               |
+                  +------------+---------------+---------------+
+                                               |
+                                  +------------+-------------+
+                                  |                          |
+                                  v                          v
+                             AMRFinderPlus            VirulenceFinder
+                                  |                          |
+                                  +------------+-------------+
+                                               |
+                                               v
+                                      WGS_summary.tsv
+```
+### Repository structure
+```
+bacterial-wgs-snakemake/
+├── Snakefile
+├── config.yaml
+├── samples.tsv
+├── environment.yml
+├── README.md
+├── .gitignore
+│
+├── envs/
+│   ├── fastqc.yaml
+│   ├── trimmomatic.yaml
+│   ├── kraken2.yaml
+│   ├── unicycler.yaml
+│   ├── quast.yaml
+│   ├── busco.yaml
+│   ├── coverm.yaml
+│   ├── mlst.yaml
+│   ├── amrfinderplus.yaml
+│   ├── virulencefinder.yaml
+│   └── summary.yaml
+│
+├── scripts/
+│   └── make_summary.py
+│
+├── data/
+├── results/
+└── logs/
+```
 ---
 
-## 1. Requirements
+## Requirements
 
 Before running the pipeline, ensure that the following are available:
 
@@ -38,6 +105,7 @@ Before running the pipeline, ensure that the following are available:
 * [ ] AMRFinderPlus database
 * [ ] BUSCO lineage dataset (bacteria_odb12 or similar)
 * [ ] Paired-end FASTQ files for every sample
+* [ ] Appropriate local databases for Kraken2, BUSCO, AMRFinderPlus and VirulenceFinder
 * [ ] `Snakefile`
 * [ ] `config.yaml`
 * [ ] `samples.tsv` (sample metadata file)
@@ -46,7 +114,49 @@ The pipeline assumes that the required software environments and databases alrea
 
 ---
 
-## 2. Input FASTQ Files
+## Installation
+Create the Snakemake environment:
+```
+conda env create -f environment.yml
+```
+Activate it:
+```
+conda activate bacterial-wgs-snakemake
+```
+Verify:
+```
+snakemake --version
+```
+## Input data
+Paired-end FASTQ files should be stored separately from the workflow repository.
+
+Example:
+```
+project/
+├── data/
+│   ├── sample01_R1.fastq.gz
+│   ├── sample01_R2.fastq.gz
+│   ├── sample02_R1.fastq.gz
+│   └── sample02_R2.fastq.gz
+│
+└── bacterial-wgs-snakemake/
+```
+## Sample sheet
+Create samples.tsv:
+```
+sample	R1	R2
+sample01	data/sample01_R1.fastq.gz	data/sample01_R2.fastq.gz
+sample02	data/sample02_R1.fastq.gz	data/sample02_R2.fastq.gz
+```
+The three required columns are:
+
+| Column | Description |
+|--------|-------------|
+| `Sample`| Unique sample identifier |
+| `R1`| Forward FASTQ |
+| `R2`| Reverse FASTQ |
+
+Sample identifiers should avoid spaces and shell/path special characters.
 
 Paired-end sequencing reads must be registered in a tab-separated sample metadata file specified by the `samples` parameter in `config.yaml`.
 
