@@ -1,0 +1,97 @@
+# ============================================================
+# Bacterial WGS de novo analysis pipeline
+# ============================================================
+
+samples: "samples.tsv"
+
+results: "results"
+logs: "logs"
+
+# ------------------------------------------------------------
+# Databases
+# ------------------------------------------------------------
+
+kraken2_db: "/path/to/kraken2/database"
+
+busco_lineage: "bacteria_odb12"
+
+virulencefinder_db: "/path/to/virulencefinder_db"
+
+# ------------------------------------------------------------
+# Optional reference genome
+#
+# QUAST Genome fraction requires a reference.
+#
+# Use:
+# reference: "/path/to/reference.fasta"
+#
+# for reference-based QUAST metrics.
+#
+# For pure de novo analysis:
+# reference: null
+# ------------------------------------------------------------
+
+reference: null
+
+# ------------------------------------------------------------
+# Trimmomatic
+# ------------------------------------------------------------
+
+adapters: "/path/to/TruSeq3-PE.fa"
+
+trimmomatic:
+  leading: 3
+  trailing: 3
+  slidingwindow: "4:20"
+  minlen: 36
+
+# ------------------------------------------------------------
+# Kraken2
+# ------------------------------------------------------------
+
+kraken2:
+  confidence: 0.0
+
+# ------------------------------------------------------------
+# CoverM
+# ------------------------------------------------------------
+
+coverm:
+  min_identity: 95
+  min_aligned_percent: 50
+
+# ------------------------------------------------------------
+# VirulenceFinder
+# ------------------------------------------------------------
+
+virulencefinder:
+  min_coverage: 0.60
+  min_identity: 0.90
+
+# ------------------------------------------------------------
+# Threads
+# ------------------------------------------------------------
+
+threads:
+
+  fastqc: 4
+
+  trimmomatic: 8
+
+  kraken2: 16
+
+  unicycler: 8
+
+  quast: 4
+
+  busco: 8
+
+  coverm: 8
+
+  mlst: 2
+
+  amrfinderplus: 8
+
+  virulencefinder: 8
+
+  summary: 1
