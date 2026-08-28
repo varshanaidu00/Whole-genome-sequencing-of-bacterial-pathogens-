@@ -1,4 +1,4 @@
-Bacterial Whole-Genome Sequencing Analysis Pipeline
+Bacterial Whole-Genome Sequencing Analysis for AMR and Virulence detection 
 =================================================================================================================
 
 ## Background
@@ -63,7 +63,7 @@ A final tabulated summary containing key metrics for every sample
 ```
 ### Repository structure
 ```
-bacterial-wgs-snakemake/
+Bacterial-wgs-snakemake/
 ├── Snakefile
 ├── config.yaml
 ├── samples.tsv
@@ -105,7 +105,6 @@ Before running the pipeline, ensure that the following are available:
 * [ ] AMRFinderPlus database
 * [ ] BUSCO lineage dataset (bacteria_odb12 or similar)
 * [ ] Paired-end FASTQ files for every sample
-* [ ] Appropriate local databases for Kraken2, BUSCO, AMRFinderPlus and VirulenceFinder
 * [ ] `Snakefile`
 * [ ] `config.yaml`
 * [ ] `samples.tsv` (sample metadata file)
@@ -188,63 +187,20 @@ isolate03	/absolute/path/to/isolate03_1.fastq	/absolute/path/to/isolate03_2.fast
 
 ---
 
-## 3. Configuration
+## Configuration
 
 The pipeline reads configuration values from `config.yaml`. This file specifies directories, databases, tool parameters, and per-tool thread allocations.
 
-### Example config.yaml
-
-```yaml
-samples: "samples.tsv"
-
-results: "results"
-logs: "logs"
-
-# Databases
+Before running the pipeline, update the database and adapter paths.
+```
 kraken2_db: "/path/to/kraken2/database"
+
 busco_lineage: "bacteria_odb12"
+
 virulencefinder_db: "/path/to/virulencefinder_db"
 
-# Optional reference genome for QUAST
-# Set to null for de novo-only analysis (no genome fraction metric)
-reference: null
-
-# Adapter file for Trimmomatic
 adapters: "/path/to/TruSeq3-PE.fa"
 
-# Trimmomatic parameters
-trimmomatic:
-  leading: 3
-  trailing: 3
-  slidingwindow: "4:20"
-  minlen: 36
-
-# Kraken2 parameters
-kraken2:
-  confidence: 0.0
-
-# CoverM parameters
-coverm:
-  min_identity: 95
-  min_aligned_percent: 50
-
-# VirulenceFinder parameters
-virulencefinder:
-  min_coverage: 0.60
-  min_identity: 0.90
-
-# Thread allocation per tool
-threads:
-  fastqc: 4
-  trimmomatic: 8
-  kraken2: 16
-  unicycler: 8
-  quast: 4
-  busco: 8
-  coverm: 8
-  mlst: 2
-  amrfinderplus: 8
-  virulencefinder: 8
 ```
 
 ### Configuration Parameter Reference
