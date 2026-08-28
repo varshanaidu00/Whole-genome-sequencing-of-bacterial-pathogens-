@@ -202,6 +202,78 @@ virulencefinder_db: "/path/to/virulencefinder_db"
 adapters: "/path/to/TruSeq3-PE.fa"
 
 ```
+Optional Reference Genome
+The workflow is primarily designed for de novo genome assembly.
+
+By default:
+
+```reference: null```
+
+In this mode, QUAST evaluates the assembly without a reference genome.
+
+If a suitable reference genome is available, specify it:
+
+```reference: "/path/to/reference.fasta"```
+
+This allows QUAST to calculate reference-dependent metrics such as:
+
+```Genome fraction (%)```
+
+**Important**
+**Genome fraction cannot be calculated from a purely reference-free de novo assembly.**
+
+Therefore, when no reference is supplied, the final summary reports ```NA``` for genome fraction.
+
+## Trimming
+Trimmomatic is run on the raw paired-end reads.
+
+The default parameters are:
+```
+trimmomatic:
+  leading: 3
+  trailing: 3
+  slidingwindow: "4:20"
+  minlen: 36
+```
+The workflow produces:
+```
+results/trimmed/
+├── sample01_R1_paired.fastq.gz
+├── sample01_R1_unpaired.fastq.gz
+├── sample01_R2_paired.fastq.gz
+└── sample01_R2_unpaired.fastq.gz
+```
+The paired reads are passed to downstream analysis.
+
+## FastQC
+FastQC is run on the trimmed paired reads.
+
+The pipeline generates ``` results/fastqc/ ``` including:
+```
+sample01_R1_paired_fastqc.html
+sample01_R2_paired_fastqc.html
+```
+and the corresponding ```fastqc_data.txt```. The final summary extracts:
+```
+Total reads
+Unique reads
+Duplicate reads
+Percentage duplicates
+Average quality score
+Percentage Q30
+GC content
+Sequence length
+```
+
+
+
+
+
+
+
+
+
+
 
 ### Configuration Parameter Reference
 
