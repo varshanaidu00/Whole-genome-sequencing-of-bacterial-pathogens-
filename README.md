@@ -304,48 +304,54 @@ BUSCO assesses genome completeness against a selected lineage dataset. The defau
 The primary output is ```results/busco/sample01/short_summary.txt```. The final summary reports ```BUSCO_Completeness``` For example, ```99.2%```. The appropriate BUSCO lineage should be selected according to the organism being analysed.
 
 ## CoverM
-CoverM is used to estimate sequencing depth/coverage of the assembled genome.
-
-The workflow maps the trimmed paired reads against the assembled genome and produces:
-
-results/coverm/sample01.tsv
-
-The final summary reports:
-
-Depth_of_Coverage
-
-For example:
-
-85.4x
-
-The default mapping thresholds are:
-
+CoverM is used to estimate sequencing depth/coverage of the assembled genome. The workflow maps the trimmed paired reads against the assembled genome and produces ```results/coverm/sample01.tsv```. The final summary reports ```Depth_of_Coverage``` For example, ```85.4x```. The default mapping thresholds are:
+```
 coverm:
   min_identity: 95
   min_aligned_percent: 50
-
+```
 These parameters should be reviewed and validated for your intended application.
 
-MLST
-MLST is run against the Unicycler assembly.
+## MLST
+MLST is run against the Unicycler assembly. The MLST scheme is determined by the MLST database available to the tool. Output: ```results/mlst/sample01.tsv```, which reports the ST.
 
-Output:
+## AMRFinderPlus & VirulenceFinder
+AMRFinderPlus is used to identify antimicrobial resistance-associated genes and determinants in the assembled genome. Output is ```results/amrfinderplus/sample01.tsv```. AMR genes are reported as ```blaTEM-1B;gyrA;parC```
 
-results/mlst/sample01.tsv
+VirulenceFinder is used to identify known virulence-associated genes. Output is ```results/virulencefinder/sample01/results_tab.tsv```. Virulence genes are reported as ```fimH;iroN;iss```
 
-The final summary reports:
+## Final Summary
+The pipeline produces a primary sample-level summary as such ```results/WGS_summary.tsv``
+A typical table will contain:
+```
+|Category	|Parameter|
+|---------|---------|
+|FastQC	|Total_Reads|
+|FastQC|	Unique_Reads|
+FastQC	Duplicate_Reads
+FastQC	Pct_Duplicates (%)
+FastQC	Avg_Q_Score
+FastQC	Pct_Q30 (%)
+FastQC	GC_Content (%)
+FastQC	Sequence_Length
+Kraken2	Classified (%)
+Kraken2	Unclassified (%)
+Kraken2	Top_Taxon
+QUAST	Genome_Fraction (%)
+QUAST	Assembly_N50 (kbp)
+QUAST	Assembly_Size (bp)
+QUAST	Number_of_Contigs
+QUAST	Percent_GC (%)
+BUSCO	Completeness
+CoverM	Depth_of_Coverage
+MLST	ST
+AMRFinderPlus	AMR_Genes
+VirulenceFinder	Virulence_Genes
 
-ST
 
-For example:
-
-131
-
-The MLST scheme is determined by the MLST database available to the tool.
-
-
-
-
+Example Summary
+Sample	Total_Reads	Unique_Reads	Duplicate_Reads	Pct_Duplicates(%)	Avg_Q_Score	Pct_Q30(%)	GC_Content(%)	Sequence_Length	Kraken2_Top_Taxon	Genome_Fraction(%)	Assembly_N50(kbp)	Assembly_Size(bp)	Number_of_Contigs	Percent_GC(%)	BUSCO_Completeness	Depth_of_Coverage	ST	AMR_Genes	Virulence_Genes
+sample01	5000000	4850000	150000	3.0	35.2	98.7	50.8	151	Escherichia coli	NA	182.4	5120000	65	50.7	99.2	85.4	131	blaTEM-1B;gyrA;parC	fimH;iroN;iss
 
 
 
