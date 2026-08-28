@@ -1,4 +1,4 @@
-Bacterial Whole-Genome Sequencing Analysis for AMR and Virulence detection 
+Bacterial Whole Genome Sequencing Analysis for AMR and Virulence detection 
 =================================================================================================================
 
 ## Background
