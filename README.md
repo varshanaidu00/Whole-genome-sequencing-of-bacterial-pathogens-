@@ -265,6 +265,106 @@ GC content
 Sequence length
 ```
 
+## Kraken2
+Kraken2 is used to classify sequencing reads taxonomically and can be used to identify unexpected organisms or potential contamination. 
+
+The main outputs are:
+```
+results/kraken2/
+├── sample01.kraken2.txt
+└── sample01.report.txt
+```
+**.kraken2.txt** contains read-level taxonomic classifications while **.report.txt** contains the summarised taxonomic classification.
+The final summary includes:
+```
+Kraken2_Classified(%)
+Kraken2_Unclassified(%)
+Kraken2_Top_Taxon
+```
+
+## Unicycler
+Unicycler performs de novo assembly using the trimmed paired-end reads. The primary assembly is ```results/assembly/sample01/assembly.fasta```
+This assembly is subsequently used by ```QUAST, BUSCO, MLST, AMRFinderPlus, VirulenceFinder
+
+## QUAST
+QUAST assesses the quality and characteristics of the assembled genome.
+
+The pipeline extracts:
+```
+Genome_Fraction(%)
+Assembly_N50(kbp)
+Assembly_Size(bp)
+Number_of_Contigs
+Percent_GC(%)
+```
+QUAST results are stored under ```results/quast/```
+
+## BUSCO
+BUSCO assesses genome completeness against a selected lineage dataset. The default configuration uses ```busco_lineage: "bacteria_odb12"```
+The primary output is ```results/busco/sample01/short_summary.txt```. The final summary reports ```BUSCO_Completeness``` For example, ```99.2%```. The appropriate BUSCO lineage should be selected according to the organism being analysed.
+
+## CoverM
+CoverM is used to estimate sequencing depth/coverage of the assembled genome.
+
+The workflow maps the trimmed paired reads against the assembled genome and produces:
+
+results/coverm/sample01.tsv
+
+The final summary reports:
+
+Depth_of_Coverage
+
+For example:
+
+85.4x
+
+The default mapping thresholds are:
+
+coverm:
+  min_identity: 95
+  min_aligned_percent: 50
+
+These parameters should be reviewed and validated for your intended application.
+
+MLST
+MLST is run against the Unicycler assembly.
+
+Output:
+
+results/mlst/sample01.tsv
+
+The final summary reports:
+
+ST
+
+For example:
+
+131
+
+The MLST scheme is determined by the MLST database available to the tool.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
